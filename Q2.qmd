@@ -1,0 +1,176 @@
+---
+title: "Q2"
+author: "Alexandra Goh"
+format: html
+---
+
+## Exercise 2
+
+A small cafe in the city of Melbourne is interested in determining whether the daily earnings depend on the weather. They compiled data for a period over 2000-2001 to study this question. Their data is provided. It has the following variables:
+
+```{r}
+#| echo: false
+library(kableExtra)
+library(tidyverse)
+library(dplyr)
+library(visdat)
+library(ggplot2)
+library(gridExtra)
+
+desc <- tibble(var=c("dt", "wday", "revenue", "expend", "precip", "mint", "maxt", "source"),
+               description=c("Date", 
+              "Day of the week",
+              "Daily revenue in hundreds, 11=1100", 
+              "Daily expenses in hundreds",
+              "Precipitation in mm", 
+              "Minimum temperature, Celsius",
+              "Maximum temperature, Celsius",
+              "Source of the weather data"))
+kbl(desc, table.attr = 'data-quarto-disable-processing="true"') |> 
+  kable_styling(full_width = FALSE) |>
+  column_spec(1, width="2cm", border_right = T) |>
+  column_spec(2, width="10cm")
+```
+
+You need to conduct an **initial data analysis** to find and **report problems** that need to be fixed.
+
+
+## Initial Data Analysis of 'cafe.rda'
+
+```{r setup, echo = TRUE, eval = TRUE, warning = FALSE}
+
+load("cafe.rda")
+
+```
+
+### Data Screening: Checking Data Types
+
+```{r, echo = TRUE, eval = TRUE, warning = FALSE}
+
+glimpse(cafe)
+
+```
+
+One problem here is that the 'dt' (Date) column is stored as a character variable, when ideally it should be read in as a date. Additionally, 'dt' is not stored in a proper date format that is typically stored in R (e.g. originally stored as "12-16-00" = MMDDYY). This may lead to errors and data inconsistencies when performing analyses or aggregations based on dates, as the days and months could get mixed up. Instead, it is more ideal for 'dt' to be stored in a consistent format such as "YYYY-MM-DD".
+
+Additionally, 'wday' is of data type <chr>, but it would be more appropriate to convert it to a factor data type to represent the day of the week in a specific order. Days of the week have a natural order; hence treating days of the week as a factor and specifying this correct order allows us to ensure that any analyses or visualizations take this order into account.
+
+Another issue is that 'expend' and 'precip' are read in as character data types. These should instead be numeric, as they represent daily expenses in hundreds and precipitation in millimeters. Storing them as characters may lead to issues during analysis and calculations. Furthermore, there's an unusual value for 'precip' that requires further investigation ("I.O"). This could have been an error in data entry as precipitation should be recorded as numerical values instead of alphabets. 
+
+### Data Cleaning
+
+### Checking for Missing Values
+
+```{r, echo = TRUE, eval = TRUE, warning = FALSE}
+
+vis_dat(cafe)
+
+```
+
+```{r, echo = TRUE, eval = TRUE, warning = FALSE}
+
+# Convert "expend" and "precip" columns to numeric
+cafe$expend <- as.numeric(cafe$expend)
+cafe$precip <- as.numeric(cafe$precip)
+
+# Convert "wday" column to factor
+cafe$wday <- as.factor(cafe$wday)
+
+# Show rows with missing values in 'revenue' or 'expend' columns
+missing_rows <- subset(cafe, is.na(revenue) | is.na(expend) | is.na(precip))
+
+# Display the rows with missing values
+print(missing_rows)
+
+```
+
+There seems to be only one row with missing values for 'expend' and 'revenue'. In this scenario, it is acceptable as the row with missing values represents a Sunday, which could have been a holiday/day that the cafe decides to close. 
+
+However, the 'precip' variable also has one row with a missing value. which is considered abnormal. As this represents daily precipitation, having missing values may indicate data collection issues or measurement errors in the dataset. Furthermore, 'Wad' is an incorrect spelling for 'wday' as it should be 'Wed' - this is a data inconsistency which could have occurred during data entry.
+
+### Summary statistics for checking numerical columns
+
+```{r, echo = TRUE, eval = TRUE, warning = FALSE}
+
+summary(cafe)
+
+```
+
+For the 'expend' (expenses) variable, the minimum is -3.230 which is a data anomaly as expenses are typically expected to be recorded as positive values, representing the daily amount of money spent by the cafe. Having a negative value can lead to confusion, incorrect calculations, and misinterpretation of the data.
+
+### Sanity Checking Data for Inconsistent Temperature Units
+
+```{r, echo = TRUE, eval = TRUE, warning = FALSE}
+
+ggplot(cafe, aes(x = seq_along(dt))) +
+  geom_line(aes(y = mint, color = "Minimum Temperature"), size = 1) +
+  geom_line(aes(y = maxt, color = "Maximum Temperature"), size = 1) +
+  labs(title = "Daily Temperature Trends",
+       x = "Row Number",
+       y = "Temperature (Celsius)",
+       color = "Temperature") +
+  scale_color_manual(values = c("Minimum Temperature" = "blue", "Maximum Temperature" = "red")) +
+  theme_minimal() +
+  theme(legend.position = "top")
+
+```
+The line graph above represents daily temperature trends using row numbers as a substitute for the x-axis, where each row corresponds to a daily record. This is because the 'dt' variable is not in a proper date format and hence unsuitable for plotting directly.
+
+Notably, we observe an interesting anomaly in the data at row 11, where the minimum temperature shows a sudden drop (i.e. negative minimum temperature), indicating extremely cold weather which is inconsistent with minimum temperatures for the other days. This abrupt shift raises questions about data quality and potential errors in temperature recording or data entry. Further investigation into this outlier should be carried out to understand the underlying cause and its impact on the overall analysis.
+
+
+### Outliers and Anomalies
+
+```{r, echo = TRUE, eval = TRUE, warning = FALSE}
+
+# Remove rows with missing values
+cafe <- cafe[complete.cases(cafe[c("revenue", "expend")]), ]
+
+# Generating boxplots 
+
+plt1 <- ggplot(cafe, aes(x = wday, y = revenue)) +
+  geom_boxplot() +
+  labs(title = "Boxplot of Revenue", x = "Day", y = "Revenue")
+
+plt2 <- ggplot(cafe, aes(x = wday, y = expend)) +
+  geom_boxplot() +
+  labs(title = "Boxplot of Expenses", x = "Day", y = "Revenue")
+
+plt3 <- ggplot(cafe, aes(x = wday, y = precip)) +
+  geom_boxplot() +
+  labs(title = "Boxplot of Precipitation", x = "Day", y = "Precipitation")
+
+plt4 <- ggplot(cafe, aes(x = wday, y = mint)) +
+  geom_boxplot() +
+  labs(title = "Boxplot of Min. Temperature", x = "Day", y = "Min. Temperature")
+
+plt5 <- ggplot(cafe, aes(x = wday, y = maxt)) +
+  geom_boxplot() +
+  labs(title = "Boxplot of Max. Temperature", x = "Day", y = "Max. Temperature")
+
+grid.arrange(
+  plt1, 
+  plt2,
+  ncol = 2  
+)
+
+plt3
+
+grid.arrange(
+  plt4,
+  plt5,
+  ncol = 2  
+)
+
+```
+
+From the boxplots above, we can identify a few issues with the data:
+
+- **Day:** As mentioned previously, "Wad" is incorrectly entered as a weekday.
+
+- **Expenses:** there is a wide variation in the range of expense values recorded, making it difficult to examine the data. However, outliers for expenses were already identified prior (i.e. negative values for expenses on Friday).
+
+- **Precipitation:** There are certain extreme values such as 60.8 and 12.6. Such values could be potential outliers or errors, especially as they deviate significantly from the normal range of precipitation values for the given time period of when the cafe data was recorded (four months). Extreme or unusual precipitation values over such a short timeframe could indicate recording errors, weather anomalies, or other factors that should be investigated further.
+
+- **Min. Temperature**: Besides the extreme negative value mentioned previously, there is also an outlier for a Wednesday record where minimum temperature was approximately 20 degrees Celsius. This may not be a data anomaly, as it could have been a hot day, but it would be good to investigate further what the maximum temperature was as well. 
+

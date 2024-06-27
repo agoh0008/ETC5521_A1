@@ -1,0 +1,91 @@
+---
+title: "Q4"
+author: "Alexandra Goh"
+format: html
+---
+
+## Exercise 4
+
+In the Tutorial 2 exercise where `DataExplorer` report on `nycflights13` data was generated, we made some observations about the relationship between `arr_delay` and `dep_delay`. This question expands on this discussion.
+
+```{r setup, include=FALSE}
+
+library(nycflights13)
+library(ggplot2)
+library(dplyr)
+
+```
+
+```{r data, include=FALSE}
+
+flights <- flights
+
+```
+
+
+a. Write a paragraph explaining how you would expect arrival delay and departure delay of flights to be related, in less than 100 words.
+
+**We would expect the relationship between arrival delay (arr_delay) and departure delay (dep_delay) to be positively correlated. This is because when a flight has a longer departure delay, it is more likely to result in a longer arrival delay as well. Departure delays could be caused by various factors such as air traffic congestion, technical issues or adverse weather conditions thus leading to a higher likelihood of delayed arrivals. However, while a positive correlation is expected, the strength of this relationship can also be influenced by individual flight routes, airline operations (e.g. efficiency of measures taken to reduce negative impact of delays), and the nature of delays encountered.**
+
+
+b. What units is delay reported in?
+
+**Delay is reported in minutes. For instance, if scheduled departure time (sched_dep_time) is 515 (5:15 am) but actual departure time (dep_time) is 517 (5:17 am), departure delay (dep_delay) is 2. On the other hand, if sched_dep_time is 600 (6:00 am) but dep_time is 554 (5:54 am), dep_delay is -6 meaning that the flight left early by 6 minutes.**
+
+
+c. Make a scatterplot of `arr_delay` vs `dep_delay`. Why should `dep_delay` be plotted on the horizontal axis?
+
+```{r plot, echo = TRUE, eval = TRUE, warning = FALSE}
+
+ggplot(data = flights, aes(x = dep_delay, y = arr_delay)) +
+  geom_point() +
+  labs(x = "Departure Delay (minutes)", y = "Arrival Delay (minutes)") +
+  ggtitle("Relationship between Departure and Arrival Delays") + 
+  theme(aspect.ratio = 1)
+
+```
+
+**Departure delay (dep_delay) should be plotted on the x-axis as it is the norm to represent independent variables (i.e. cause) on the x-axis and dependent variables (i.e. effect) on the y-axis. As mentioned prior, departure delay can potentially influence the arrival delay of flights as well. Therefore, placing dep_delay on the x-axis and arr_delay on the y-axis makes it easier to interpret that changes in departure delay may lead to changes in arrival delay.** 
+
+d. Describe the relationship between the two variables. 
+
+**The scatterplot above displays a strong, almost linear positive relationship between departure delays and arrival delays, with most data points clustered around the lower range of the positive correlation. This concentrated grouping at the lower end indicates that while departure delays are associated with increased arrival delays (as indicated by the positive correlation), there are a significant number of flights experiencing relatively shorter arrival delays despite having longer departure delays. It therefore suggests that there are certain additional factors which contribute to minimizing the impact of departure delays on overall flight time.**
+
+
+e. Explain whether the pattern is consistent with what you expected, or how it differs.
+
+**While the pattern is consistent with our expectations of there being a positive correlation between departure and arrival delays, the presence of having many observations clustered in the lower end of the positive correlation range is unexpected. This differs from our original assumption as it infers that despite longer departure delays, a substantial number of flights still managed to keep their arrival delays lower than what might be anticipated.**
+
+**To conclude, while the overall positive correlation aligns with our initial expectations, the concentrated grouping of data points around the lower half underscores the influence of additional factors that may have caused variations from the direct relationship between departure and arrival delays.**
+
+
+f. How many flights have departure delays over 8 hours?
+
+```{r depdelay, echo = TRUE, eval = TRUE, warning = FALSE}
+
+flights %>%
+  filter(dep_delay > 480, na.rm = TRUE) %>%
+  nrow()
+
+```
+**67 flights have departure delays over 8 hours (which is 480 minutes).**
+
+
+g. For flights with departure delays over 8 hours, how many had shorter arrival delays?
+
+```{r arrdelay, echo = TRUE, eval = TRUE, warning = FALSE}
+
+flights %>%
+  filter(dep_delay > 480, na.rm = TRUE) %>%
+  filter(arr_delay < dep_delay) %>%
+  nrow()
+
+```
+**51 flights had arrival delays shorter than their respective departure delays.**
+
+
+h. Based on these last calculations, would you say that it is typical for flights that are delayed on departure to catch up time during the flight?
+
+**Based on the previous calculations, we found that out of 67 flights with departure delays over 8 hours, 51 had arrival delays comparatively shorter than their respective departure delays. Hence, this indicates that a large proportion of these flights did manage to catch up time during the flight therefore suggesting that it may be typical for delayed flights to potentially make up for some of their initial delay.**
+
+**However, it's important to note that this may not hold true for all flights as it is dependent on external factors as well such as flight route, distance, air traffic conditions, operational efficiency and more. We would need to conduct more comprehensive analysis and take into consideration these additional factors that also contribute to departure/arrival delays.**

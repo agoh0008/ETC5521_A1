@@ -1,0 +1,272 @@
+---
+title: "Q1"
+author: "Alexandra Goh"
+format: html
+---
+
+## Exercise 1
+
+The [blog post by Manuel Rademaker](https://www.manuel-rademaker.com/blog/tidy_tuesday/2021_05_15_ceo_depatures/) describes a neat analysis of the [Tidy Tuesday](https://github.com/rfordatascience/tidytuesday) data on CEO departures. Re-run this analysis for yourself. Report any problems reproducing the results. Your primary task for this exercise is to outline all of the parts of the analysis, and label them as EDA, IDA or confirmatory analysis.
+
+
+### Setups
+
+```{r setup, echo = TRUE, eval = TRUE, warning = FALSE}
+
+library(tidytuesdayR) # to easily get the tidy Tuesday data
+library(tidyverse)    # includes dplyr, tidyr, ggplot, forcats etc.
+library(visdat)       # for visualizing missing data (and data types)
+main_color    = "#516DB0"
+
+```
+
+### Load data and get an understanding 
+
+```{r, echo = TRUE, eval = TRUE, warning = FALSE}
+
+tt  <- tidytuesdayR::tt_load('2021-04-27')
+ceo <- tt$departures
+
+```
+```{r, echo = TRUE, eval = TRUE, warning = FALSE}
+
+dim(ceo)
+
+```
+
+```{r, echo = TRUE, eval = TRUE, warning = FALSE}
+
+vis_dat(ceo)
+```
+
+This section involves conducting an IDA (initial data analysis). We first use the dim() function to retrieve dimensions (i.e. number of rows and columns) of the data frame. However, we get a different result as to what Rademaker had (20 columns with 9423 observations). In our *ceo* dataset, there are 19 columns with 9423 observations, with the missing column being X1. 
+
+Additionally, the vis_dat() function shows a visual summary of missing data in the *ceo* dataset. As each plot represents a variable, we can use this to scrutinise the data for missing observations by observing the distribution of missing data for each variable (i.e. the grey areas). Our missing data patterns are similar to what Rademaker described.
+
+These functions therefore assist us in understanding the structure of the dataset before conducting more in-depth analysis.
+
+
+### Develop questions / hypotheses 
+
+*Ok, looks like there are not many variables that actually explains more precisely why a CEO might have departed the way he did (e.g., the competition had stronger growth, winnings declined etc.). So the main point of the data set is to compare the reasons for departure as given by the data set.*
+
+*Here are a couple of questions that come to my mind:*
+
+*1. What is the distribution of CEO departure reasons (by year (or every 5 years), overall)?*
+
+EDA: this involves exploring the distribution of CEO departure reasons (i.e. examining the data's patterns).
+
+*2. Does the distribution change over the years (i.e. are CEOs now more likely to be removed for legal reasons for example)?*
+
+EDA: similar to the first one, this explores changes in the distribution of CEO departure reasons over time (i.e. investigating potential patterns).
+
+*3. Do CEOs that are fired (3 & 4) get fired again more often than others? Or in general: whats the likelihood of departing for reason x given reason y for dismissal.*
+
+IDA: this involves a predefined hypothesis, where we are assuming that CEOs who are fired get fired again more often than others. This supports a confirmatory analysis, which is when we would test the likelihood of CEO departures based on specific reasons. For instance, we may design formal statistical tests later on to investigate whether CEOs who are fired (i.e. codes 3 & 4) have a higher likelihood of being fired again in comparison to CEOs who were not fired for those reasons.
+
+*4. Look at companies and their CEO turnover. Which companies stand out (e.g., because they dismiss many CEOs).*
+
+EDA: by identifying companies with high CEO turnover, this also explores the data for any patterns/potential outliers. 
+
+*5. If possible, look at the history of some interesting CEOs. Maybe there are some that stand out (e.g. because they always left for legal reasons).*
+
+EDA: Exploring the history of CEOs that stand out due to specific departure reasons is an example of uncovering patterns in the data without a predefined hypothesis. 
+
+Overall, most of this section (except Q3) includes EDA (exploratory data analysis) as we are generating questions and proposing hypotheses about the data, which is later followed by data visualizations to gain insights and discover patterns. This provides a preliminary understanding of the dataset and guides further investigation into the reasons for CEO departures.
+
+
+### Address questions / hypotheses
+
+#### Question 1: Overall distribution of depature
+
+```{r, echo = TRUE, eval = TRUE, warning = FALSE}
+
+ggplot(ceo, aes(y = departure_code)) + 
+   geom_bar(fill = main_color) +
+   labs(
+      title    = "Reason for CEO departure",
+      x = "",
+      y = ""
+   )
+
+```
+
+```{r, echo = TRUE, eval = TRUE, warning = FALSE}
+
+ceo %>% 
+   group_by(fyear, departure_code) %>% 
+   count()
+
+```
+
+```{r, echo = TRUE, eval = TRUE, warning = FALSE}
+
+ceo_reduced <- ceo %>% 
+   filter(departure_code %in% 3:7) %>% 
+   mutate(
+      departure_label = as.factor(recode(departure_code,
+         `3` = "Bad performance",
+         `4` = "Legal",
+         `5` = "Retired",
+         `6` = "New opportunity",
+         `7` = "Other")),
+      fyear = lubridate::make_date(fyear)) %>% 
+   relocate(fyear, departure_label)
+
+```
+
+```{r, echo = TRUE, eval = TRUE, warning = FALSE}
+
+ceo_reduced %>% 
+   group_by(departure_label) %>% 
+   count() %>% 
+   ggplot(aes(y = fct_reorder(departure_label, n), x = n)) + 
+   geom_col(fill = main_color) +
+   labs(
+      title = "CEO depature by reason",
+      subtitle = "S&P 1500 firms between 1987 - 2019",
+      x = "",
+      y = "",
+      caption = "Source: Gentry et al."
+   ) + 
+   scale_x_continuous(breaks = scales::breaks_width(500))
+
+```
+
+For Question 1, we did not encounter many problems when reproducing the plot, except for the need to declare 'main_color' as the fill color, which had to be defined at the beginning of the Rmarkdown.
+
+This part involves exploratory data analysis (EDA) as visualizations (using ggplot2) were created to explore the distribution of CEO departures by reasons. For instance, the bar plots indicate the frequency (number of CEOs) of each departure reason. By interpreting these plots, we can then make initial observations about the most common departure reasons (e.g. retirement, other reasons - merger, restructuring, or some other event, bad performance, legal issues, new opportunities) which helps us identify potential areas of interest for further investigation. Data wrangling was also deployed to transform and prepare the data for analysis, such as creating meaningful labels for the departure reasons (i.e. converting 'fyear' into a date column and filtering out specific departure codes).
+
+
+#### Question 2: Reason for departure over time
+
+```{r, echo = TRUE, eval = TRUE, warning = FALSE}
+
+ceo_reduced %>%
+   group_by(fyear, departure_label) %>% 
+   count() %>% 
+   ggplot(aes(x = fyear, y = n, color = departure_label)) + 
+   geom_line() + 
+   labs(
+      title = "CEO departure by reason over time",
+      subtitle = "S&P 1500 firms between 1987 - 2019",
+      color = "Reason",
+      y     = "",
+      x     = ""
+   )
+
+```
+
+```{r, echo = TRUE, eval = TRUE, warning = FALSE}
+
+ceo_reduced %>%
+   filter(fyear != "1987-01-01")  %>%
+   group_by(fyear, departure_label) %>% 
+   count() %>% 
+   group_by(fyear) %>% 
+   mutate(share_fyear = n/sum(n)) %>% 
+   ungroup() %>% # for fct_reorder!
+   mutate(departure_label = fct_reorder(departure_label, -share_fyear, last)) %>% 
+   ggplot(aes(x = fyear, y = share_fyear, color = departure_label)) + 
+   geom_line() + 
+   labs(
+      title = "CEO departure by Reason over time",
+      subtitle = "S&P 1500 firms between 1987 - 2019",
+      color = "Reason",
+      x     = "",
+      y     = "% of total departures"
+   ) + 
+   scale_y_continuous(labels = scales::label_percent()) +
+   scale_x_date(
+      breaks = scales::breaks_width("4 years"),
+      labels = scales::label_date("%Y")
+      )
+
+```
+
+There were no issues reproducing Question 2, other than different colors being generated for the line graph as compared to Rademaker's. 
+
+This section is also another example of EDA, as we are first transforming the data by grouping and summarizing it by year and departure reason before calculating the share (percentage) of CEO departures for each reason within each year. The new variable 'share_fyear' represents the proportion of departures for each specific reason in a year. A line plot is then created to visualize the changes in the share of departures over time for each departure reason from 1987 to 2019. Using different colors for each line allows us to easily identify trends for each departure reason across the years. From this, we can see that while there are not many obvious patterns, there may be a slight increase in “Bad performance” departures over the years. 
+
+
+#### Question 3: Trajectories
+
+```{r, echo = TRUE, eval = TRUE, warning = FALSE}
+
+ceo_al_twice <- ceo_reduced %>%
+   group_by(exec_fullname) %>% 
+   mutate(appears_al_twice = n(), .after = departure_label) %>% 
+   filter(appears_al_twice > 1) %>%
+   ungroup()
+
+length(unique(ceo_al_twice$exec_fullname))
+
+```
+```{r, echo = TRUE, eval = TRUE, warning = FALSE}
+
+# Note: divide to get the unique values
+table(ceo_al_twice$appears_al_twice) / c(2, 3, 4)
+
+```
+
+```{r, echo = TRUE, eval = TRUE, warning = FALSE}
+
+ceo_changes <- ceo_al_twice %>% 
+   arrange(fyear) %>% 
+   group_by(exec_fullname) %>% 
+   mutate(departure_no = 1:n(), .after = departure_label,
+          departure_no = fct_inorder(recode(departure_no,
+             `1` = "First departure",
+             `2` = "Second departure",
+             `3` = "Third departure",
+             `4` = "Fourth departure"))) %>% 
+   ungroup()
+
+ggplot(ceo_changes, aes(x = departure_no, y = departure_label, group = exec_fullname)) + 
+   geom_line() +
+   labs(
+      x = "",
+      y = ""
+   )
+
+```
+
+```{r, echo = TRUE, eval = TRUE, warning = FALSE}
+
+ceo_changes_freq <- ceo_changes %>% 
+   count(departure_label, departure_no)
+
+ceo_4_changes <- ceo_changes %>% 
+   filter(appears_al_twice  == 4)
+
+ggplot(ceo_changes, aes(x = departure_no, y = departure_label)) + 
+   geom_line(aes(group = exec_fullname), alpha = 0.2) +
+   geom_point(
+      data = ceo_changes_freq, 
+      mapping = aes(size = n)) + 
+   geom_line(
+      data = ceo_4_changes, 
+      mapping = aes(group = exec_fullname, color = exec_fullname),
+      show.legend = FALSE) +
+   geom_text(      
+      data = filter(ceo_4_changes, departure_no  == "Fourth departure"), 
+      mapping = aes(label = exec_fullname),
+      nudge_y = -0.1
+      ) + 
+   labs(
+      title = "Trajectories of the reasons for CEO departure",
+      subtitle = "S&P 1500 firms between 1987 - 2019",
+      x = "",
+      y = "",
+      size = "Number of cases"
+   ) + 
+   theme(legend.position="bottom")
+
+```
+
+The analysis conducted under Question 3 falls under EDA as well. Firstly, data wrangling is performed to identify CEOs who appear more than once in the data. Labels are also assigned to number of departures, whereby the data is organized to focus on trajectories of CEOs with multiple departures and their reasons. This process of restructuring the data and creating new variables for further analysis is a significant part of EDA, as it helps to uncover hidden patterns/insights that may not be immediately apparent. 
+
+We then create visualizations using line plots, points and labels to explore the trajectories of CEOs who have multiple departures by observing the sequence of departure reasons for each CEO. This visualization is enhanced by using appropriate techniques such as the 'alpha' parameter and the 'size' aesthetic to highlight which changes appear more often (i.e. the 2 CEOs that had 4 changes) and address overplotting. 
+
+By doing so, we can make observations about interesting patterns, such as the absence of "legal" or "bad performance" reasons among CEOs with four departures and how some CEOs still come back to work despite "retiring". Therefore, using these visualizations and descriptive techniques to explore the data and generate insights are classified as EDA, since we are not specifically testing any hypotheses or conducting formal statistical inferences (which is more confirmatory analysis).
+

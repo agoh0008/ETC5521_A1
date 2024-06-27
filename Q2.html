@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alexandra Goh">
+
+<title>Q2</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Q2_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Q2_files/libs/quarto-html/quarto.js"></script>
+<script src="Q2_files/libs/quarto-html/popper.min.js"></script>
+<script src="Q2_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Q2_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Q2_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Q2_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Q2_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Q2_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Q2_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+<script src="Q2_files/libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="Q2_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Q2</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Alexandra Goh </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="exercise-2" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-2">Exercise 2</h2>
+<p>A small cafe in the city of Melbourne is interested in determining whether the daily earnings depend on the weather. They compiled data for a period over 2000-2001 to study this question. Their data is provided. It has the following variables:</p>
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.2     ✔ readr     2.1.4
+✔ forcats   1.0.0     ✔ stringr   1.5.0
+✔ ggplot2   3.4.2     ✔ tibble    3.2.1
+✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+✔ purrr     1.0.1     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter()     masks stats::filter()
+✖ dplyr::group_rows() masks kableExtra::group_rows()
+✖ dplyr::lag()        masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors
+
+Attaching package: 'gridExtra'
+
+
+The following object is masked from 'package:dplyr':
+
+    combine</code></pre>
+</div>
+<div class="cell-output-display">
+
+<table data-quarto-disable-processing="true" class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> var </th>
+   <th style="text-align:left;"> description </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;width: 2cm; border-right:1px solid;"> dt </td>
+   <td style="text-align:left;width: 10cm; "> Date </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;width: 2cm; border-right:1px solid;"> wday </td>
+   <td style="text-align:left;width: 10cm; "> Day of the week </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;width: 2cm; border-right:1px solid;"> revenue </td>
+   <td style="text-align:left;width: 10cm; "> Daily revenue in hundreds, 11=1100 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;width: 2cm; border-right:1px solid;"> expend </td>
+   <td style="text-align:left;width: 10cm; "> Daily expenses in hundreds </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;width: 2cm; border-right:1px solid;"> precip </td>
+   <td style="text-align:left;width: 10cm; "> Precipitation in mm </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;width: 2cm; border-right:1px solid;"> mint </td>
+   <td style="text-align:left;width: 10cm; "> Minimum temperature, Celsius </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;width: 2cm; border-right:1px solid;"> maxt </td>
+   <td style="text-align:left;width: 10cm; "> Maximum temperature, Celsius </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;width: 2cm; border-right:1px solid;"> source </td>
+   <td style="text-align:left;width: 10cm; "> Source of the weather data </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<p>You need to conduct an <strong>initial data analysis</strong> to find and <strong>report problems</strong> that need to be fixed.</p>
+</section>
+<section id="initial-data-analysis-of-cafe.rda" class="level2">
+<h2 class="anchored" data-anchor-id="initial-data-analysis-of-cafe.rda">Initial Data Analysis of ‘cafe.rda’</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"cafe.rda"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="data-screening-checking-data-types" class="level3">
+<h3 class="anchored" data-anchor-id="data-screening-checking-data-types">Data Screening: Checking Data Types</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(cafe)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 91
+Columns: 8
+$ dt      &lt;chr&gt; "12-16-00", "12-17-00", "12-18-00", "12-19-00", "12-20-00", "1…
+$ wday    &lt;chr&gt; "Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun",…
+$ revenue &lt;dbl&gt; 10.97, 12.13, 11.27, 14.33, 15.61, 18.37, 11.60, 12.58, 13.23,…
+$ expend  &lt;chr&gt; "7.21", "6.01", "0.64", "4.06", "3", "2.63", "0.6", "2.19", "6…
+$ precip  &lt;chr&gt; "0.4", "0.6", "0", "0", "0", "0", "7", "0", "0", "0", "0", "0"…
+$ mint    &lt;dbl&gt; 16.40000, 14.60000, 18.00000, 15.40000, 16.60000, 14.60000, 16…
+$ maxt    &lt;dbl&gt; 23.00000, 21.00000, 18.77056, 29.23121, 25.81983, 32.74231, 20…
+$ source  &lt;chr&gt; "BOSM", "BOSM", "NOAE", "NOAE", "NOAE", "NOAE", "NOAE", "BOSM"…</code></pre>
+</div>
+</div>
+<p>One problem here is that the ‘dt’ (Date) column is stored as a character variable, when ideally it should be read in as a date. Additionally, ‘dt’ is not stored in a proper date format that is typically stored in R (e.g.&nbsp;originally stored as “12-16-00” = MMDDYY). This may lead to errors and data inconsistencies when performing analyses or aggregations based on dates, as the days and months could get mixed up. Instead, it is more ideal for ‘dt’ to be stored in a consistent format such as “YYYY-MM-DD”.</p>
+<p>Additionally, ‘wday’ is of data type <chr>, but it would be more appropriate to convert it to a factor data type to represent the day of the week in a specific order. Days of the week have a natural order; hence treating days of the week as a factor and specifying this correct order allows us to ensure that any analyses or visualizations take this order into account.</chr></p>
+<p>Another issue is that ‘expend’ and ‘precip’ are read in as character data types. These should instead be numeric, as they represent daily expenses in hundreds and precipitation in millimeters. Storing them as characters may lead to issues during analysis and calculations. Furthermore, there’s an unusual value for ‘precip’ that requires further investigation (“I.O”). This could have been an error in data entry as precipitation should be recorded as numerical values instead of alphabets.</p>
+</section>
+<section id="data-cleaning" class="level3">
+<h3 class="anchored" data-anchor-id="data-cleaning">Data Cleaning</h3>
+</section>
+<section id="checking-for-missing-values" class="level3">
+<h3 class="anchored" data-anchor-id="checking-for-missing-values">Checking for Missing Values</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vis_dat</span>(cafe)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Q2_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert "expend" and "precip" columns to numeric</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>cafe<span class="sc">$</span>expend <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(cafe<span class="sc">$</span>expend)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>cafe<span class="sc">$</span>precip <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(cafe<span class="sc">$</span>precip)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert "wday" column to factor</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>cafe<span class="sc">$</span>wday <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(cafe<span class="sc">$</span>wday)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Show rows with missing values in 'revenue' or 'expend' columns</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>missing_rows <span class="ot">&lt;-</span> <span class="fu">subset</span>(cafe, <span class="fu">is.na</span>(revenue) <span class="sc">|</span> <span class="fu">is.na</span>(expend) <span class="sc">|</span> <span class="fu">is.na</span>(precip))</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the rows with missing values</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(missing_rows)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 8
+  dt       wday  revenue expend precip  mint  maxt source
+  &lt;chr&gt;    &lt;fct&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; 
+1 01-24-01 Wad      18.5   6.01   NA    18.8  32.9 NOAE  
+2 03-11-01 Sun      NA    NA       0.2  18.4  33   BOSM  </code></pre>
+</div>
+</div>
+<p>There seems to be only one row with missing values for ‘expend’ and ‘revenue’. In this scenario, it is acceptable as the row with missing values represents a Sunday, which could have been a holiday/day that the cafe decides to close.</p>
+<p>However, the ‘precip’ variable also has one row with a missing value. which is considered abnormal. As this represents daily precipitation, having missing values may indicate data collection issues or measurement errors in the dataset. Furthermore, ‘Wad’ is an incorrect spelling for ‘wday’ as it should be ‘Wed’ - this is a data inconsistency which could have occurred during data entry.</p>
+</section>
+<section id="summary-statistics-for-checking-numerical-columns" class="level3">
+<h3 class="anchored" data-anchor-id="summary-statistics-for-checking-numerical-columns">Summary statistics for checking numerical columns</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(cafe)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      dt                 wday       revenue          expend      
+ Length:91          Fri    :13   Min.   :10.97   Min.   :-3.230  
+ Class :character   Mon    :13   1st Qu.:15.08   1st Qu.: 3.768  
+ Mode  :character   Sat    :13   Median :17.55   Median : 5.835  
+                    Sun    :13   Mean   :17.59   Mean   : 5.796  
+                    Thu    :13   3rd Qu.:19.94   3rd Qu.: 7.353  
+                    Tue    :13   Max.   :25.08   Max.   :13.890  
+                    (Other):13   NA's   :1       NA's   :1       
+     precip            mint             maxt          source         
+ Min.   : 0.000   Min.   :-16.60   Min.   :16.20   Length:91         
+ 1st Qu.: 0.000   1st Qu.: 16.20   1st Qu.:22.58   Class :character  
+ Median : 0.200   Median : 17.20   Median :27.00   Mode  :character  
+ Mean   : 1.484   Mean   : 17.01   Mean   :26.82                     
+ 3rd Qu.: 0.900   3rd Qu.: 18.60   3rd Qu.:31.00                     
+ Max.   :60.800   Max.   : 21.00   Max.   :36.95                     
+ NA's   :1                                                           </code></pre>
+</div>
+</div>
+<p>For the ‘expend’ (expenses) variable, the minimum is -3.230 which is a data anomaly as expenses are typically expected to be recorded as positive values, representing the daily amount of money spent by the cafe. Having a negative value can lead to confusion, incorrect calculations, and misinterpretation of the data.</p>
+</section>
+<section id="sanity-checking-data-for-inconsistent-temperature-units" class="level3">
+<h3 class="anchored" data-anchor-id="sanity-checking-data-for-inconsistent-temperature-units">Sanity Checking Data for Inconsistent Temperature Units</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(cafe, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">seq_along</span>(dt))) <span class="sc">+</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> mint, <span class="at">color =</span> <span class="st">"Minimum Temperature"</span>), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> maxt, <span class="at">color =</span> <span class="st">"Maximum Temperature"</span>), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Daily Temperature Trends"</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Row Number"</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Temperature (Celsius)"</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">"Temperature"</span>) <span class="sc">+</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Minimum Temperature"</span> <span class="ot">=</span> <span class="st">"blue"</span>, <span class="st">"Maximum Temperature"</span> <span class="ot">=</span> <span class="st">"red"</span>)) <span class="sc">+</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"top"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Q2_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The line graph above represents daily temperature trends using row numbers as a substitute for the x-axis, where each row corresponds to a daily record. This is because the ‘dt’ variable is not in a proper date format and hence unsuitable for plotting directly.</p>
+<p>Notably, we observe an interesting anomaly in the data at row 11, where the minimum temperature shows a sudden drop (i.e.&nbsp;negative minimum temperature), indicating extremely cold weather which is inconsistent with minimum temperatures for the other days. This abrupt shift raises questions about data quality and potential errors in temperature recording or data entry. Further investigation into this outlier should be carried out to understand the underlying cause and its impact on the overall analysis.</p>
+</section>
+<section id="outliers-and-anomalies" class="level3">
+<h3 class="anchored" data-anchor-id="outliers-and-anomalies">Outliers and Anomalies</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove rows with missing values</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>cafe <span class="ot">&lt;-</span> cafe[<span class="fu">complete.cases</span>(cafe[<span class="fu">c</span>(<span class="st">"revenue"</span>, <span class="st">"expend"</span>)]), ]</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Generating boxplots </span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>plt1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(cafe, <span class="fu">aes</span>(<span class="at">x =</span> wday, <span class="at">y =</span> revenue)) <span class="sc">+</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Boxplot of Revenue"</span>, <span class="at">x =</span> <span class="st">"Day"</span>, <span class="at">y =</span> <span class="st">"Revenue"</span>)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>plt2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(cafe, <span class="fu">aes</span>(<span class="at">x =</span> wday, <span class="at">y =</span> expend)) <span class="sc">+</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Boxplot of Expenses"</span>, <span class="at">x =</span> <span class="st">"Day"</span>, <span class="at">y =</span> <span class="st">"Revenue"</span>)</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>plt3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(cafe, <span class="fu">aes</span>(<span class="at">x =</span> wday, <span class="at">y =</span> precip)) <span class="sc">+</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Boxplot of Precipitation"</span>, <span class="at">x =</span> <span class="st">"Day"</span>, <span class="at">y =</span> <span class="st">"Precipitation"</span>)</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>plt4 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(cafe, <span class="fu">aes</span>(<span class="at">x =</span> wday, <span class="at">y =</span> mint)) <span class="sc">+</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Boxplot of Min. Temperature"</span>, <span class="at">x =</span> <span class="st">"Day"</span>, <span class="at">y =</span> <span class="st">"Min. Temperature"</span>)</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>plt5 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(cafe, <span class="fu">aes</span>(<span class="at">x =</span> wday, <span class="at">y =</span> maxt)) <span class="sc">+</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Boxplot of Max. Temperature"</span>, <span class="at">x =</span> <span class="st">"Day"</span>, <span class="at">y =</span> <span class="st">"Max. Temperature"</span>)</span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.arrange</span>(</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>  plt1, </span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>  plt2,</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">ncol =</span> <span class="dv">2</span>  </span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Q2_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>plt3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Q2_files/figure-html/unnamed-chunk-7-2.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.arrange</span>(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  plt4,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  plt5,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">ncol =</span> <span class="dv">2</span>  </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Q2_files/figure-html/unnamed-chunk-7-3.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>From the boxplots above, we can identify a few issues with the data:</p>
+<ul>
+<li><p><strong>Day:</strong> As mentioned previously, “Wad” is incorrectly entered as a weekday.</p></li>
+<li><p><strong>Expenses:</strong> there is a wide variation in the range of expense values recorded, making it difficult to examine the data. However, outliers for expenses were already identified prior (i.e.&nbsp;negative values for expenses on Friday).</p></li>
+<li><p><strong>Precipitation:</strong> There are certain extreme values such as 60.8 and 12.6. Such values could be potential outliers or errors, especially as they deviate significantly from the normal range of precipitation values for the given time period of when the cafe data was recorded (four months). Extreme or unusual precipitation values over such a short timeframe could indicate recording errors, weather anomalies, or other factors that should be investigated further.</p></li>
+<li><p><strong>Min. Temperature</strong>: Besides the extreme negative value mentioned previously, there is also an outlier for a Wednesday record where minimum temperature was approximately 20 degrees Celsius. This may not be a data anomaly, as it could have been a hot day, but it would be good to investigate further what the maximum temperature was as well.</p></li>
+</ul>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
